@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bupt.recommend.DAO.BusinessPOMapper">
+  <resultMap id="BaseResultMap" type="com.bupt.recommend.DAO.PO.BusinessPO">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="business_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="full_address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="open" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="categories" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="city" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="review_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="longitude" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="latitude" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="stars" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="state" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, business_id, full_address, open, categories, city, review_count, name, longitude, 
+    latitude, stars, state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yelp_business
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectTopBusiness" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yelp_business
+    order by stars desc
+    limit #{count} offset #{start}
+  </select>
+  <select id="selectBusinessCity"  resultType="java.lang.String">
+    select distinct city
+    from yelp_business
+  </select>
+  <select id="selectBusinessState"  resultType="java.lang.String">
+    select distinct `state`
+    from yelp_business
+  </select>
+  <select id="selectLongtitdeLatitdude"  parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yelp_business
+    order by city desc
+    limit 200
+  </select>
+  <select id="selectBusinessByCondition" resultMap="BaseResultMap">
+    select * from yelp_business
+    where 1 = 1
+    <if test="reviewCountMin != null">
+      and review_count &gt;= #{reviewCountMin}
+    </if>
+    <if test="reviewCountMax != null">
+      and review_count &lt; #{reviewCountMax}
+    </if>
+    <if test="city != null">
+      and city like concat('%', #{city}, '%')
+    </if>
+    <if test="state != null">
+      and state like concat('%', #{state}, '%')
+    </if>
+    <if test="stars != null">
+      and stars = #{stars}
+    </if>
+    order by stars desc
+    limit #{count} offset #{start}
+  </select>
+  <select id="countBusinessByCondition" resultType="java.lang.Integer">
+    select count(1) from yelp_business
+    where 1 = 1
+    <if test="reviewCountMin != null">
+      and review_count &gt;= #{reviewCountMin}
+    </if>
+    <if test="reviewCountMax != null">
+      and review_count &lt; #{reviewCountMax}
+    </if>
+    <if test="city != null">
+      and city like concat('%', #{city}, '%')
+    </if>
+    <if test="state != null">
+      and state like concat('%', #{state}, '%')
+    </if>
+    <if test="stars != null">
+      and stars = #{stars}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yelp_business
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bupt.recommend.DAO.PO.BusinessPO">
+    insert into yelp_business (id, business_id, full_address, 
+      open, categories, city, 
+      review_count, name, longitude, 
+      latitude, stars, state
+      )
+    values (#{id,jdbcType=INTEGER}, #{businessId,jdbcType=VARCHAR}, #{fullAddress,jdbcType=VARCHAR}, 
+      #{open,jdbcType=INTEGER}, #{categories,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{reviewCount,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{longitude,jdbcType=DOUBLE}, 
+      #{latitude,jdbcType=DOUBLE}, #{stars,jdbcType=INTEGER}, #{state,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bupt.recommend.DAO.PO.BusinessPO">
+    insert into yelp_business
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="fullAddress != null">
+        full_address,
+      </if>
+      <if test="open != null">
+        open,
+      </if>
+      <if test="categories != null">
+        categories,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="reviewCount != null">
+        review_count,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="stars != null">
+        stars,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null">
+        #{businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="fullAddress != null">
+        #{fullAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="open != null">
+        #{open,jdbcType=INTEGER},
+      </if>
+      <if test="categories != null">
+        #{categories,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewCount != null">
+        #{reviewCount,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="stars != null">
+        #{stars,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bupt.recommend.DAO.PO.BusinessPO">
+    update yelp_business
+    <set>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="fullAddress != null">
+        full_address = #{fullAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="open != null">
+        open = #{open,jdbcType=INTEGER},
+      </if>
+      <if test="categories != null">
+        categories = #{categories,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewCount != null">
+        review_count = #{reviewCount,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="stars != null">
+        stars = #{stars,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bupt.recommend.DAO.PO.BusinessPO">
+    update yelp_business
+    set business_id = #{businessId,jdbcType=VARCHAR},
+      full_address = #{fullAddress,jdbcType=VARCHAR},
+      open = #{open,jdbcType=INTEGER},
+      categories = #{categories,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      review_count = #{reviewCount,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      stars = #{stars,jdbcType=INTEGER},
+      state = #{state,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
