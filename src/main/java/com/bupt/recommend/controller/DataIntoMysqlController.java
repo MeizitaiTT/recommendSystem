@@ -11,9 +11,10 @@ public class DataIntoMysqlController {
     @Autowired
     DataIntoMysqlService dataIntoMysqlService;
 
+
     @RequestMapping("/data/intoMysql")
     public void DataInsert(){
-        dataIntoMysqlService.DataInsert();
+        dataIntoMysqlService.DataInsert();//数据插入
         return ;
     }
 }
