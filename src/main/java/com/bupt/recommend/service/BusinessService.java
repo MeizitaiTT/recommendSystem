@@ -13,4 +13,5 @@ public interface BusinessService {
     int countBusinessByConditions(Integer reviewCountMin, Integer reviewCountMax, String city, String state,
                                 Integer stars) throws Exception;
     List<BusinessDTO> selectLongtitudeLatitude() throws Exception;
+    List<BusinessDTO> getRandBusiness(int start,int count) throws Exception;
 }

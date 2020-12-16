@@ -34,4 +34,6 @@ public interface BusinessPOMapper {
                                  @Param("city") String city, @Param("state") String state,
                                  @Param("stars") Integer stars) throws Exception;
     List<BusinessPO> selectLongtitdeLatitdude() throws Exception;
+
+    List<BusinessPO> selectRandBusiness(@Param("start") Integer start, @Param("count") Integer count) throws Exception;
 }

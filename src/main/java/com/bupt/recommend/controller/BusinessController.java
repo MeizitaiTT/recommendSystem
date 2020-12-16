@@ -135,7 +135,7 @@ public class BusinessController {
         try {
             // TODO implement this, return fake data temporarily
             BusinessRespVO businessRespVO = new BusinessRespVO();
-            businessRespVO.setBusinessDTOList(businessService.getTopBusiness(start, count));
+            businessRespVO.setBusinessDTOList(businessService.getRandBusiness(start, count));
             businessRespVO.setStart(start);
             businessRespVO.setCount(count);
             businessRespVO.setTotal(10);

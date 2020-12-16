@@ -34,6 +34,14 @@
     order by stars desc
     limit #{count} offset #{start}
   </select>
+  <select id="selectRandBusiness" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yelp_business
+    where state='AZ'
+    ORDER BY RAND() desc
+    limit #{count}
+  </select>
   <select id="selectBusinessCity"  resultType="java.lang.String">
     select distinct city
     from yelp_business

@@ -64,6 +64,17 @@ public class BusinessServiceImpl implements BusinessService {
         return businessDTOList;
     }
 
+    @Override
+    public List<BusinessDTO> getRandBusiness(int start, int count) throws Exception {
+        List<BusinessPO> businessPOList = businessPOMapper.selectRandBusiness(start,count);
+        List<BusinessDTO> businessDTOList = new ArrayList<>();
+        for(BusinessPO businessPO:businessPOList){
+            BusinessDTO businessDTO = businessPoToDTO(businessPO);
+            businessDTOList.add(businessDTO);
+        }
+        return businessDTOList;
+    }
+
     public BusinessDTO businessPoToDTO(BusinessPO businessPO){
         BusinessDTO businessDTO = new BusinessDTO();
         businessDTO.setId(businessPO.getId());
